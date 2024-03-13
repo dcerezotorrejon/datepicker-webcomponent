@@ -1,0 +1,162 @@
+:host {
+  position: relative;
+  font-family: Verdana, sans-serif;
+}
+
+.calendar {
+  &-arrow {
+    padding: 1rem;
+    position: absolute;
+    top: 2px;
+    border: none;
+    background-color: none;
+    cursor: pointer;
+
+    &::before {
+      content: "";
+      border: solid rgb(245 14 14);
+      border-width: 0 1px 1px 0;
+      display: inline-block;
+      padding: 0.5rem;
+    }
+
+    &--right {
+      right: 2px;
+
+      &::before {
+        transform: rotate(-45deg);
+      }
+    }
+
+    &--left {
+      left: 2px;
+
+      &::before {
+        transform: rotate(135deg);
+      }
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:enabled {
+      background-color: white;
+    }
+  }
+
+  &-general-container {
+    max-width: 780px;
+    min-width: 300px;
+    border: 1px solid black;
+    display: flex;
+    flex-flow: column nowrap;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    background-color: white;
+  }
+
+  &-calendar {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    position: relative;
+    width: fit-content;
+    gap: 0.5rem;
+  }
+
+  &-weekday-bar {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+  }
+
+  &-weekday-item {
+    display: inline-block;
+    width: 3rem;
+    font-size: 1rem;
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+
+  &-month {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    flex-basis: 45%;
+    width: 21rem;
+  }
+
+  &-month-grill {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+  }
+
+  &-day {
+    width: 3rem;
+
+    &-btn {
+      background: none;
+      cursor: pointer;
+      border: none;
+      padding: 0.5rem 0;
+      font-size: 1rem;
+      text-align: center;
+      width: 100%;
+
+      &--selected {
+        background-color: #fd0000;
+      }
+
+      &--simple-hover {
+        &:hover {
+          background-color: #ec3e3e;
+        }
+      }
+
+      &--range {
+        background-color: #dd4d21;
+
+        &-end {
+          background-color: #07630c;
+        }
+
+        &-start {
+          background-color: #e5e909;
+        }
+
+        &-hover {
+          &-start {
+            background-color: #e5e909;
+          }
+
+          &-end {
+            background-color: #07630c;
+          }
+
+          background-color: #dd4d21;
+        }
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        background-color: none;
+      }
+    }
+  }
+
+  &-month-title {
+    display: flex;
+    text-align: center;
+    font-size: 1.35rem;
+    font-weight: bold;
+    padding: 0.5rem 0;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 0 0.5rem;
+  }
+}
