@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Stencil Component Starter</title>
+
+    <script type="module" src="/build/datepicker-component.esm.js"></script>
+    <script nomodule src="/build/datepicker-component.js"></script>
+  </head>
+  <body>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit sint vel quisquam maxime dolorum. Iure optio natus vero, dolore illum cum sunt ipsam consequuntur nihil omnis. Corrupti quidem quas aliquid!</p>
+    <date-picker
+      id="ib-datepicker-0"
+      aria-label="Selector de fecha"
+      show-months="2"
+      start-week-day="1"
+      locale="es-ES"
+      mode="range"
+      open-on-focus="true"
+      input-start-selector="#inputStart"
+      input-end-selector="#inputEnd"
+      aria-expanded="false",
+      keep-calendar-open="true"
+      open="true"
+      >
+      <div slot="calendar-inputs">
+        <label for="inputStart">Fecha de ida</label>
+        <input aria-label="Fecha inicial" aria-controls="ib-datepicker-0" type="text" id="inputStart" />
+        <label for="inputEnd">Fecha de vuelta</label>
+        <input aria-label="Fecha final" aria-controls="ib-datepicker-0" type="text" id="inputEnd" />
+        
+      </div>
+      <div slot="calendar-top" hidden>
+        <div>
+          <div style="
+          width: 50%;
+          display: inline-block;"">
+            <input id="flex" type="checkbox"/>
+            <label for="flex">Mis fechas son flexibles</label>
+          </div>
+          <div style="
+          width: 45%;display: inline-block;text-align: end;"">
+            <span id="date"></span>
+            <script> var date = new Date().toLocaleDateString('es-ES'); document.querySelector('#date').innerHTML=date</script>
+          </div>
+        </div>
+      </div>
+      
+    </date-picker>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit sint vel quisquam maxime dolorum. Iure optio natus vero, dolore illum cum sunt ipsam consequuntur nihil omnis. Corrupti quidem quas aliquid!</p>
+  </body>
+</html>

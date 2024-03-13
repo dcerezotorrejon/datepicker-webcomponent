@@ -1,14 +1,14 @@
 import { Component, Prop, h, Watch, Element, State, Event, EventEmitter, Method, Fragment, Listen } from '@stencil/core';
-import * as CalendarUtils from './ib-datepicker-utils/utils';
-import * as CalendarTypes from './ib-datepicker-models';
-import { DatepickerContants } from './ib-datepicker-constants';
+import * as CalendarUtils from './datepicker-utils/utils';
+import * as CalendarTypes from './datepicker-models';
+import { DatepickerContants } from './datepicker-constants';
 
 @Component({
-  tag: 'ib-datepicker',
-  styleUrl: 'ib-datepicker.scss',
+  tag: 'date-picker',
+  styleUrl: 'datepicker.scss',
   shadow: true,
 })
-export class IbDatepicker {
+export class Datepicker {
   /**
    * The first name
    */
@@ -40,7 +40,7 @@ export class IbDatepicker {
   @Listen('click', { target: 'document' })
   handleClickOutside(event: Event): void {
     const target = event.target as HTMLElement;
-    const isInsideDatepicker = target?.closest('ib-datepicker');
+    const isInsideDatepicker = target?.closest('date-picker');
     if (this.open && target !== this.inputStart && target !== this.inputEnd && isInsideDatepicker === null) {
       this.closeDatepicker();
     }
@@ -237,7 +237,7 @@ export class IbDatepicker {
     const days: string[] = CalendarUtils.daysReordered(this.startWeekDay, this.locale);
     const renderDayBar = (): Element[] => {
       return days.map((day: string): Element => {
-        return <span class="ib-calendar-weekday-item">{day}</span>;
+        return <span class="calendar-weekday-item">{day}</span>;
       });
     };
 
@@ -245,7 +245,7 @@ export class IbDatepicker {
   }
 
   private readonly calculateDayClassSingleMode = (day: Date): string => {
-    return this.selectedDates[0]?.getTime() === day.getTime() ? 'ib-calendar-day-btn--selected' : 'ib-calendar-day-btn--simple-hover';
+    return this.selectedDates[0]?.getTime() === day.getTime() ? 'calendar-day-btn--selected' : 'calendar-day-btn--simple-hover';
   };
 
   private readonly calculateDayClassRangeMode = (day: Date): string => {
@@ -254,11 +254,11 @@ export class IbDatepicker {
     const dayTime = day.getTime();
     let classes = '';
     if (timeStart === dayTime) {
-      classes += 'ib-calendar-day-btn--range-start';
+      classes += 'calendar-day-btn--range-start';
     } else if (timeEnd === dayTime) {
-      classes += 'ib-calendar-day-btn--range-end';
+      classes += 'calendar-day-btn--range-end';
     } else if (timeStart < dayTime && timeEnd > dayTime && timeStart !== 0 && timeEnd !== 0) {
-      classes += 'ib-calendar-day-btn--range';
+      classes += 'calendar-day-btn--range';
     }
     return classes;
   };
@@ -272,18 +272,18 @@ export class IbDatepicker {
   };
 
   private renderEmptyCell(): Element {
-    return <div class="ib-calendar-day"></div>;
+    return <div class="calendar-day"></div>;
   }
 
   private readonly calculateHover = (target: HTMLElement): void => {
     const targetDate: Date = target['data-date'];
     if (DatepickerContants.RANGE_INPUTS.START === this.latestFocusedInput) {
       const selectorType = this.calculateNextSelectingDateStartMode(targetDate);
-      target.classList.add(selectorType === DatepickerContants.RANGE_INPUTS.START ? 'ib-calendar-day-btn--range-hover-start' : 'ib-calendar-day-btn--range-hover-end');
+      target.classList.add(selectorType === DatepickerContants.RANGE_INPUTS.START ? 'calendar-day-btn--range-hover-start' : 'calendar-day-btn--range-hover-end');
       this.calculateHoverRangeClass(selectorType, targetDate);
     } else {
       const selectorType = this.calculateNextSelectingDateEndMode(targetDate);
-      target.classList.add(selectorType === DatepickerContants.RANGE_INPUTS.START ? 'ib-calendar-day-btn--range-hover-start' : 'ib-calendar-day-btn--range-hover-end');
+      target.classList.add(selectorType === DatepickerContants.RANGE_INPUTS.START ? 'calendar-day-btn--range-hover-start' : 'calendar-day-btn--range-hover-end');
       this.calculateHoverRangeClass(selectorType, targetDate);
     }
   };
@@ -295,12 +295,12 @@ export class IbDatepicker {
       (selectorType === DatepickerContants.RANGE_INPUTS.START && elementDate > targetDate && selectedEnd != null && elementDate < selectedEnd) ||
       (selectorType === DatepickerContants.RANGE_INPUTS.END && elementDate < targetDate && selectedStart != null && elementDate > selectedStart)
     ) {
-      element.classList.add('ib-calendar-day-btn--range-hover');
+      element.classList.add('calendar-day-btn--range-hover');
     }
   };
 
   private readonly calculateHoverRangeClass = (selectorType: string, targetDate: Date): void => {
-    const elements = this.element.shadowRoot?.querySelectorAll('.ib-calendar-day-btn') ?? [];
+    const elements = this.element.shadowRoot?.querySelectorAll('.calendar-day-btn') ?? [];
     elements.forEach((element: HTMLElement) => {
       this.updateRangeHoverCell(element, selectorType, targetDate);
     });
@@ -314,28 +314,28 @@ export class IbDatepicker {
 
   private onMouseLeaveDateCellRange(): void {
     const elements =
-      this.element.shadowRoot?.querySelectorAll('.ib-calendar-day-btn--range-hover-start, .ib-calendar-day-btn--range-hover-end, .ib-calendar-day-btn--range-hover') ?? [];
+      this.element.shadowRoot?.querySelectorAll('.calendar-day-btn--range-hover-start, .calendar-day-btn--range-hover-end, .calendar-day-btn--range-hover') ?? [];
     elements.forEach((element: HTMLElement) => {
-      element.classList.remove('ib-calendar-day-btn--range-hover-start', 'ib-calendar-day-btn--range-hover-end', 'ib-calendar-day-btn--range-hover');
+      element.classList.remove('calendar-day-btn--range-hover-start', 'calendar-day-btn--range-hover-end', 'calendar-day-btn--range-hover');
     });
   }
 
   private renderDateCell(day: Date): Element {
     const { locale, selectedDayAction, calculateAdditionalDayClass, onMouseOverDateCellRange, onMouseLeaveDateCellRange, minDate, maxDate, onDayRender } = this;
     const isRange: boolean = this.mode === 'range';
-    const ariaLabel = day?.toLocaleDateString(locale, { dateStyle: 'full' });
+    const ariaLabel = day?.toLocaleDateString(locale, { dateStyle: 'full' } as any);
     const onClick = selectedDayAction.bind(this, day);
     const onMouseOver = isRange ? onMouseOverDateCellRange.bind(this) : null;
     const onMouseLeave = isRange ? onMouseLeaveDateCellRange.bind(this) : null;
     const configObj: CalendarTypes.externalDaySettings = {
-      class: `ib-calendar-day-btn ${calculateAdditionalDayClass(day)}`,
+      class: `calendar-day-btn ${calculateAdditionalDayClass(day)}`,
       isEnabled: day != null && day >= minDate && day <= maxDate,
     };
     if (onDayRender != null) {
       onDayRender(configObj, day);
     }
     return (
-      <div class="ib-calendar-day">
+      <div class="calendar-day">
         <button
           class={configObj.class}
           data-date={day}
@@ -366,13 +366,13 @@ export class IbDatepicker {
   private renderMonth(year: number, monthIndex: number): Element {
     const monthName: string = CalendarUtils.capitalizeString(new Date(year, monthIndex).toLocaleDateString(this.locale, { month: 'long' }));
     return (
-      <div class="ib-calendar-month" data-month-index={`${year}${monthIndex}`}>
-        <div class="ib-calendar-month-title">
+      <div class="calendar-month" data-month-index={`${year}${monthIndex}`}>
+        <div class="calendar-month-title">
           <span>{monthName}</span>
           <span>{year}</span>
         </div>
-        <div class="ib-calendar-weekday-bar">{this.renderWeekDay()}</div>
-        <div class="ib-calendar-month-grill">{this.renderDayGrill(year, monthIndex)}</div>
+        <div class="calendar-weekday-bar">{this.renderWeekDay()}</div>
+        <div class="calendar-month-grill">{this.renderDayGrill(year, monthIndex)}</div>
       </div>
     );
   }
@@ -391,7 +391,7 @@ export class IbDatepicker {
       return months;
     };
     return (
-      <div class="ib-calendar-calendar" aria-label="Calendar datepicker">
+      <div class="calendar-calendar" aria-label="Calendar datepicker">
         {this.renderLeftArrow()}
         {this.renderRightArrow()}
         {renderCalendarMonths()}
@@ -400,14 +400,14 @@ export class IbDatepicker {
   }
 
   private arrowPreviousMonth(): void {
-    const arrow: Element | null = this?.element?.shadowRoot?.querySelector('.ib-calendar-arrow--left') ?? null;
+    const arrow: Element | null = this?.element?.shadowRoot?.querySelector('.calendar-arrow--left') ?? null;
     if (arrow != null) {
       this.currentMonthObject = new Date(this.currentMonthObject.setMonth(this.currentMonthObject.getMonth() - 1));
     }
   }
 
   private arrowNextMonth(): void {
-    const arrow: Element | null = this?.element?.shadowRoot?.querySelector('.ib-calendar-arrow--right') ?? null;
+    const arrow: Element | null = this?.element?.shadowRoot?.querySelector('.calendar-arrow--right') ?? null;
     if (arrow != null) {
       this.currentMonthObject = new Date(this.currentMonthObject.setMonth(this.currentMonthObject.getMonth() + 1));
     }
@@ -418,7 +418,7 @@ export class IbDatepicker {
     return (
       <Fragment>
         {enableArrow && (
-          <button class="ib-calendar-arrow ib-calendar-arrow--left" aria-label="Previous month" onClick={this.arrowPreviousMonth.bind(this)}>
+          <button class="calendar-arrow calendar-arrow--left" aria-label="Previous month" onClick={this.arrowPreviousMonth.bind(this)}>
             <span class=""></span>
           </button>
         )}
@@ -431,7 +431,7 @@ export class IbDatepicker {
     return (
       <Fragment>
         {enableArrow && (
-          <button class="ib-calendar-arrow ib-calendar-arrow--right" aria-label="Next month" onClick={this.arrowNextMonth.bind(this)}>
+          <button class="calendar-arrow calendar-arrow--right" aria-label="Next month" onClick={this.arrowNextMonth.bind(this)}>
             <span class=""></span>
           </button>
         )}
@@ -544,11 +544,12 @@ export class IbDatepicker {
     return (
       <Fragment>
         <slot name="calendar-inputs"></slot>
-        <div class="ib-calendar-general-container">
+        <div class="calendar-general-container">
           <slot name="calendar-top"></slot>
           {this.renderCalendar()}
         </div>
       </Fragment>
     );
   }
+  
 }

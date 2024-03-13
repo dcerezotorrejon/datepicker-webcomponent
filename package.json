@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/dcerezotorrejon/datepicker-webcomponent#readme",
   "devDependencies": {
-    "@stencil/core": "^4.12.6"
+    "@stencil/core": "^4.12.6",
+    "@stencil/sass": "^3.0.10",
+    "typescript": "^5.4.2"
   }
 }
